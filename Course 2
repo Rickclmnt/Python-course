@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Explained | Learn to Code from Zero</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg:#0a0a0a;
+            --text:#e0e0e0;
+            --accent:#00ccff;
+            --secondary:#1a1a1a;
+            --border:#2a2a2a;
+            --success:#06ACD6;
+        }
+        body {background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; line-height:1.6; overflow-x:hidden;}
+        .noise{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:0.03;z-index:1000;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");}
+        nav{position:fixed;top:0;width:100%;padding:1.5rem 5%;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(10px);background:rgba(10,10,10,0.8);border-bottom:1px solid var(--border);z-index:100;}
+        .logo{font-size:1.2rem;font-weight:700;letter-spacing:2px;position:relative;}
+        .logo::before{content:'';position:absolute;left:-10px;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--accent);}
+        .nav-links{display:flex;gap:2.5rem;list-style:none;}
+        .nav-links a{color:var(--text);text-decoration:none;font-size:0.9rem;transition:color 0.3s;position:relative;}
+        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:0;width:0;height:1px;background:var(--accent);transition:width 0.3s;}
+        .nav-links a:hover::after{width:100%;}
+        .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:0 5%;}
+        .grid-bg{position:absolute;top:0;left:0;width:100%;height:100%;background-image: linear-gradient(var(--border) 1px, transparent 1px),linear-gradient(90deg, var(--border) 1px, transparent 1px);background-size:50px 50px;opacity:0.3;mask-image:radial-gradient(ellipse at center, black 20%, transparent 70%);}
+        .hero-content{max-width:900px;position:relative;z-index:2;text-align:center;}
+        .hero h1{font-size:clamp(2.5rem,6vw,5rem);font-weight:300;margin-bottom:1.5rem;line-height:1.1;}
+        .hero h1 .highlight{background:linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;}
+        .hero p{font-size:1.2rem;color:#999;margin-bottom:3rem;max-width:700px;margin-left:auto;margin-right:auto;}
+        .cta-primary{display:inline-block;padding:1rem 2.5rem;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:600;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.3s;}
+        .cta-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);transition:left 0.5s;}
+        .cta-primary:hover::before{left:100%;}
+        .cta-primary:hover{transform:translateY(-2px);}
+        section{padding:8rem 5%;position:relative;}
+        .section-header{max-width:1200px;margin:0 auto 5rem;}
+        .section-label{font-size:0.85rem;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;}
+        .section-title{font-size:clamp(2rem,4vw,3rem);font-weight:300;margin-bottom:1.5rem;}
+        .section-desc{font-size:1.1rem;color:#999;max-width:700px;margin:auto;}
+        .services-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;}
+        .service-card{background:var(--secondary);padding:2.5rem;border:1px solid var(--border);position:relative;transition:all 0.3s;}
+        .service-card::before{content:'';position:absolute;top:0;left:0;width:0;height:100%;background:linear-gradient(90deg,var(--accent)0%,transparent 100%);opacity:0.1;transition:width 0.5s;}
+        .service-card:hover::before{width:100%;}
+        .service-card:hover{border-color:var(--accent);transform:translateY(-5px);}
+        .service-number{font-size:0.85rem;color:var(--accent);letter-spacing:2px;margin-bottom:1rem;font-weight:600;}
+        .service-card h3{font-size:1.5rem;margin-bottom:1rem;font-weight:500;}
+        .service-card p{color:#aaa;line-height:1.8;}
+        .newsletter{background:var(--secondary);border:1px solid var(--border);padding:4rem;max-width:800px;margin:0 auto;text-align:center;}
+        .newsletter h3{font-size:2rem;margin-bottom:1rem;font-weight:300;}
+        .newsletter p{color:#999;margin-bottom:2rem;}
+        .newsletter-form{display:flex;gap:1rem;max-width:500px;margin:0 auto;}
+        .newsletter-form input{flex:1;padding:1rem;background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:1rem;}
+        .newsletter-form input:focus{outline:none;border-color:var(--accent);}
+        .newsletter-form button{padding:1rem 2rem;background:var(--accent);color:var(--bg);border:none;font-weight:600;cursor:pointer;transition:opacity 0.3s;}
+        .newsletter-form button:hover{opacity:0.9;}
+        .newsletter-form button:disabled{opacity:0.5;cursor:not-allowed;}
+        footer{background:var(--bg);border-top:1px solid var(--border);padding:4rem 5%;text-align:center;}
+        .footer-content{max-width:1200px;margin:0 auto;}
+        .footer-links{display:flex;justify-content:center;gap:4rem;margin-bottom:2rem;flex-wrap:wrap;}
+        .footer-links a{color:#999;text-decoration:none;transition:color 0.3s;}
+        .footer-links a:hover{color:var(--accent);}
+        .copyright{color:#666;font-size:0.9rem;}
+        .bullet-list{list-style:none;max-width:700px;margin:2rem auto;text-align:left;}
+        .bullet-list li{color:#aaa;margin-bottom:1.2rem;padding-left:1.5rem;position:relative;line-height:1.8;font-size:1.05rem;}
+        .bullet-list li::before{content:'▸';color:var(--accent);font-weight:bold;position:absolute;left:0;}
+        .stats-row{display:flex;justify-content:center;margin-top:4rem;flex-wrap:wrap;}
+        .stat{text-align:center;margin-right:20px;}
+        .stat-number{font-size:2.5rem;font-weight:700;color:var(--accent);margin-bottom:0.5rem;}
+        .stat-label{color:#666;font-size:0.95rem;text-transform:uppercase;letter-spacing:1px;}
+        .success-message{background:var(--secondary);border:1px solid var(--success);padding:2rem;margin-top:2rem;display:none;border-radius:4px;}
+        .success-message.show{display:block;}
+        .success-message h4{color:var(--success);margin-bottom:1rem;font-size:1.3rem;}
+        .success-message p{color:#999;line-height:1.7;}
+        @media(max-width:768px){
+            nav{flex-direction:column;gap:1rem}
+            .nav-links{gap:1.5rem}
+            section{padding:4rem 5%}
+            .services-grid{grid-template-columns:1fr}
+            .newsletter{padding:2rem}
+            .newsletter-form{flex-direction:column}
+            .stats-row{gap:2rem}
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <nav>
+        <div class="logo">P. Clement Tutoring</div> 
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="grid-bg"></div>
+        <div class="hero-content">
+            <br><h1>Master Python <span class="highlight">from Scratch</span></h1><br>
+            <p>Go from complete beginner to confident programmer. Learn the thinking patterns and problem-solving skills that separate coders from programmers.</p>
+        </div>
+    </section>
+
+    <!-- Course Philosophy -->
+    <section id="course">
+        <div class="section-header">
+            <div class="section-label">The Approach</div>
+            <h2 class="section-title">Think Like a Programmer, Not Just Code Like One</h2>
+            <p class="section-desc">Most courses dump syntax at you and hope it sticks. This course teaches you how programmers actually think—breaking down problems, designing solutions, and understanding systems from the ground up.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-number">01</div>
+                <h3>Systems Thinking</h3>
+                <p>See how programs work as interconnected systems. Understand the "why" behind every line of code, not just the "how."</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">02</div>
+                <h3>Problem Decomposition</h3>
+                <p>Learn to break complex problems into manageable pieces. This is the #1 skill that separates beginners from professionals.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">03</div>
+                <h3>Debugging Mastery</h3>
+                <p>Stop guessing, start solving. Learn systematic debugging techniques that turn frustrating errors into learning opportunities.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">04</div>
+                <h3>Practical Automation</h3>
+                <p>Build real tools that save time and solve problems. Start automating tasks and creating useful programs from day one.</p>
+            </div>
+        </div>
+        <div class="stats-row">
+            <div class="stat">
+                <div class="stat-number">9</div>
+                <div class="stat-label">Modules</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">40+</div>
+                <div class="stat-label">Exercises</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Lifetime Access</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Should Take This -->
+    <section id="audience">
+        <div class="section-header">
+            <div class="section-label">Is This For You?</div>
+            <h2 class="section-title">Designed for Complete Beginners</h2>
+            <p class="section-desc">If you've never written a line of code, you're in the right place. This course assumes zero programming knowledge and builds everything from the foundation up.</p>
+        </div>
+        <ul class="bullet-list">
+            <li><strong>Career explorers</strong> testing if programming is right for them</li>
+            <li><strong>Students</strong> wanting a head start before computer science classes</li>
+            <li><strong>Professionals</strong> looking to add coding skills to their toolkit</li>
+            <li><strong>Curious minds</strong> who want to understand how software really works</li>
+        </ul>
+        
+        <div class="section-header" style="margin-top:6rem;">
+            <div class="section-label">Your Learning Outcomes</div>
+            <h2 class="section-title">What You'll Walk Away With</h2><br>
+            <p class="section-desc">By the end of this course, you'll have:</p>
+        
+        <ul class="bullet-list">
+            <li><strong>Confidence</strong> to write, read, and understand Python code without constantly Googling</li>
+            <li><strong>Problem-solving frameworks</strong> that work for any programming challenge</li>
+            <li><strong>Systems thinking</strong> skills that transfer to any language or technology</li>
+            <li><strong>Debugging expertise</strong> to fix issues methodically instead of randomly</li>
+            <li><strong>Real projects</strong> in your portfolio that demonstrate your abilities</li>
+        </ul></div>
+        <div style="text-align:center;margin-top:3rem;">
+            <a href="#enroll" class="cta-primary">Enroll Now →</a>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section id="curriculum">
+        <div class="section-header">
+            <div class="section-label">What You'll Learn</div>
+            <h2 class="section-title">9 Modules, Zero to Programmer</h2>
+            <p class="section-desc">Each module builds on the last, taking you from absolute beginner to confident coder with a programmer's mindset.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-number">MODULE 0</div>
+                <h3>Welcome & Environment Setup</h3>
+                <p>Install Python, configure your development environment, and understand what makes learning to code different from other skills.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 1</div>
+                <h3>How Computers Think</h3>
+                <p>Understand programs as input → process → output systems. Learn to think computationally before writing a single line of code.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 2</div>
+                <h3>Data Types & Variables</h3>
+                <p>Master numbers, text, and booleans. Learn how computers store and transform information, plus hands-on data manipulation exercises.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 3</div>
+                <h3>Logic & Decision Making</h3>
+                <p>Control program flow with conditionals. Learn boolean logic, comparison operators, and how to plan decision trees before coding.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 4</div>
+                <h3>Loops & Automation</h3>
+                <p>Make computers do repetitive work for you. Build automation scripts and understand iteration patterns that power real applications.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 5</div>
+                <h3>Functions & Modularity</h3>
+                <p>Write reusable code blocks. Learn to design functions as mini-systems, reduce repetition, and organize code like a professional.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 6</div>
+                <h3>File Operations</h3>
+                <p>Read and write files safely. Build practical tools for data processing, logging, and automation that work with real-world files.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 7</div>
+                <h3>Debugging & Error Handling</h3>
+                <p>Turn errors from roadblocks into insights. Master systematic debugging, read tracebacks, and develop troubleshooting strategies.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-number">MODULE 8</div>
+                <h3>Next Steps & Projects</h3>
+                <p>Plan your learning path forward. Discover libraries, frameworks, and project ideas to continue your programming journey.</p>
+            </div>
+        </div>
+    </section>
+<section>
+    <div class="section-header" style="margin-top:6rem;">
+    <div class="section-label">Pricing</div>
+    <h2 class="section-title">Price: $30 (one-time)</h2>
+    <p class="section-desc">• Lifetime access<br>
+• Learn at your own pace<br>
+• Access from any device</p>
+</div>
+</section>
+
+    <!-- Enrollment Section -->
+    <section id="enroll">
+        <div class="section-header">
+            <div class="section-label">Ready to Start?</div>
+            <h2 class="section-title">Lifetime Access, Start Immediately</h2>
+            <p class="section-desc">Pay once, learn forever. Self-paced curriculum that works on any device. No subscriptions, no recurring fees.</p>
+        </div>
+        <div class="newsletter">
+            <h3>Begin Your Python Journey</h3>
+            <p>Enter your email to receive enrollment details and course access</p>
+            <form class="newsletter-form" id="enrollForm">
+                <input type="email" id="emailInput" placeholder="your.email@example.com" required>
+                <button type="submit" id="submitBtn">Get Started →</button>
+            </form>
+            <div class="success-message" id="successMessage">
+                <h4>✓ Welcome to Python Explained!</h4>
+                <p>Check your inbox for your enrollment confirmation and course access details. You should receive it within the next few minutes. If you don't see it, check your spam folder.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#home">• Home</a>
+                <a href="#course"><br>• Course</a>
+                <a href="#curriculum">• Curriculum</a>
+                <a href="#enroll"><br>• Enroll</a>
+            </div>
+            <div class="copyright">© 2026 P. Clement Tutoring. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
+            anchor.addEventListener('click',function(e){
+                e.preventDefault();
+                const target=document.querySelector(this.getAttribute('href'));
+                if(target){target.scrollIntoView({behavior:'smooth'});}
+            });
+        });
+
+        // Enhanced enrollment form with auto-email
+        document.getElementById('enrollForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('emailInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            const email = emailInput.value;
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
+            try {
+                // Send enrollment email using FormSubmit service (free, no backend needed)
+                const response = await fetch('https://formsubmit.co/ajax/rickclmnt@gmail.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'New Python Course Enrollment',
+                        _template: 'table',
+                        _captcha: 'false',
+                        _autoresponse: `Thank you for enrolling in Python Explained!
+
+Your journey to becoming a programmer starts now.
+
+WHAT'S NEXT:
+1. You'll receive course access details within 24 hours
+2. Check your inbox for a welcome email with login instructions
+3. Join our student community for support and resources
+
+COURSE HIGHLIGHTS:
+✓ 9 comprehensive modules
+✓ 40+ hands-on exercises  
+✓ Lifetime access
+✓ Self-paced learning
+✓ Real-world projects
+
+Questions? Reply to this email anytime.
+
+Happy coding!
+
+— P. Clement Tutoring
+Python Explained: From Zero to Programmer`
+                    })
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    successMessage.classList.add('show');
+                    emailInput.value = '';
+                    submitBtn.textContent = 'Enrolled ✓';
+                    
+                    // Hide form after success
+                    setTimeout(() => {
+                        emailInput.style.display = 'none';
+                    }, 1000);
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                alert('There was an error processing your enrollment. Please try again or contact me directly at rickclmnt@gmail.com.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Get Started →';
+            }
+        });
+    </script>
+</body>
+</html>
